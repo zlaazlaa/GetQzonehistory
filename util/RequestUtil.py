@@ -32,8 +32,16 @@ headers = {
 }
 
 
-# 获取历史消息列表
+# 获取历史消息列表（含重试）
 def get_message(start, count):
+    while True:
+        message_content = get_message_unsafe(start, count)
+        if message_content.encoding.lower() == 'utf-8':
+            return message_content
+
+
+# 获取历史消息列表
+def get_message_unsafe(start, count):
     params = {
         'uin': uin,
         'begin_time': '0',
